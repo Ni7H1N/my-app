@@ -455,13 +455,8 @@ class ChatOut(BaseModel):
 
 @api_router.post("/ai/chat", response_model=ChatOut)
 async def ai_chat(payload: ChatIn):
-    try:
-        reply = await ai_ask(payload.session_id, payload.message)
-    except RuntimeError as exc:
-        raise HTTPException(status_code=503, detail=str(exc)) from exc
-    except Exception as exc:  # noqa: BLE001 - surface any provider error safely
-        logger.exception("AI chat failed")
-        raise HTTPException(status_code=502, detail=f"AI provider error: {exc}") from exc
+    # ai_ask itself handles fallback on provider/budget errors and always returns a string.
+    reply = await ai_ask(payload.session_id, payload.message)
     return ChatOut(reply=reply, session_id=payload.session_id)
 
 

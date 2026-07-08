@@ -216,3 +216,69 @@ class TestResumeAsset:
         ctype = r.headers.get("content-type", "")
         assert "pdf" in ctype.lower(), f"unexpected content-type: {ctype}"
         assert len(r.content) > 100, "resume.pdf appears empty"
+
+
+# -------- AI agent (portfolio Q&A) --------
+class TestAIAgent:
+    """AI agent must ALWAYS return HTTP 200 with a helpful reply (fallback works when LLM budget is exhausted)."""
+
+    def test_ai_suggestions_returns_five_strings(self, client):
+        r = client.get(f"{BASE}/ai/suggestions", timeout=15)
+        assert r.status_code == 200
+        data = r.json()
+        assert "suggestions" in data
+        arr = data["suggestions"]
+        assert isinstance(arr, list)
+        assert len(arr) == 5, f"expected 5 suggestions, got {len(arr)}"
+        for s in arr:
+            assert isinstance(s, str) and len(s) > 0
+
+    def test_ai_chat_hire_returns_devsecops_and_email(self, client):
+        payload = {"session_id": "test_sess_hire001", "message": "Why should I hire Nithin?"}
+        r = client.post(f"{BASE}/ai/chat", json=payload, timeout=30)
+        assert r.status_code == 200, f"body={r.text}"
+        data = r.json()
+        assert "reply" in data
+        reply = data["reply"].lower()
+        # Canned reply should mention DevSecOps and email
+        assert "devsecops" in reply, f"reply missing 'devsecops': {reply}"
+        assert "nithinkaripalli@gmail.com" in reply or "email" in reply or "@" in reply, (
+            f"reply should contain contact info: {reply}"
+        )
+        assert data["session_id"] == payload["session_id"]
+
+    def test_ai_chat_devsecops_stack_mentions_tools(self, client):
+        payload = {
+            "session_id": "test_sess_stack01",
+            "message": "Tell me about his DevSecOps stack",
+        }
+        r = client.post(f"{BASE}/ai/chat", json=payload, timeout=30)
+        assert r.status_code == 200, f"body={r.text}"
+        reply = r.json()["reply"].lower()
+        # Canned reply must name SonarQube, Trivy, Argo CD
+        assert "sonarqube" in reply, f"missing SonarQube: {reply}"
+        assert "trivy" in reply, f"missing Trivy: {reply}"
+        assert "argo" in reply, f"missing Argo CD: {reply}"
+
+    def test_ai_chat_offtopic_returns_friendly_fallback_not_500(self, client):
+        payload = {
+            "session_id": "test_sess_offtop1",
+            "message": "What is quantum physics?",
+        }
+        r = client.post(f"{BASE}/ai/chat", json=payload, timeout=30)
+        # Must be HTTP 200 (never 5xx) with some reply string
+        assert r.status_code == 200, f"got {r.status_code}, body={r.text}"
+        data = r.json()
+        assert "reply" in data
+        assert isinstance(data["reply"], str) and len(data["reply"]) > 20
+
+    def test_ai_chat_validation_rejects_empty_message(self, client):
+        payload = {"session_id": "test_sess_valid01", "message": ""}
+        r = client.post(f"{BASE}/ai/chat", json=payload, timeout=15)
+        assert r.status_code == 422
+
+    def test_ai_chat_validation_rejects_short_session_id(self, client):
+        payload = {"session_id": "x", "message": "hello"}
+        r = client.post(f"{BASE}/ai/chat", json=payload, timeout=15)
+        assert r.status_code == 422
+
