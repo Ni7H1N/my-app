@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import "@/App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ReactLenis from "lenis/react";
@@ -9,6 +9,8 @@ import ScrollProgress from "@/components/effects/ScrollProgress";
 import BackToTop from "@/components/effects/BackToTop";
 import MouseSpotlight from "@/components/effects/MouseSpotlight";
 import CommandPalette from "@/components/effects/CommandPalette";
+
+const AIAgent = lazy(() => import("@/components/effects/AIAgent"));
 
 function App() {
   const [paletteOpen, setPaletteOpen] = useState(false);
@@ -39,6 +41,9 @@ function App() {
         <MouseSpotlight />
         <ScrollProgress />
         <BackToTop />
+        <Suspense fallback={null}>
+          <AIAgent />
+        </Suspense>
         <Toaster theme="dark" position="bottom-right" richColors />
         <BrowserRouter>
           <CommandPalette open={paletteOpen} onOpenChange={setPaletteOpen} />

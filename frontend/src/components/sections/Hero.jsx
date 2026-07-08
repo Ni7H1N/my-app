@@ -55,7 +55,7 @@ export default function Hero() {
                   data-testid={IDS.heroRoleRotator}
                   className="text-white font-cabinet text-glow"
                 >
-                  {ROLES[roleIndex].toLowerCase()}.
+                  {ROLES[roleIndex]}.
                 </motion.span>
               </span>
             </span>

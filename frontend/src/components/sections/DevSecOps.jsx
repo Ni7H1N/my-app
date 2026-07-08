@@ -1,10 +1,22 @@
 import { motion } from "framer-motion";
-import { DEVSECOPS_PIPELINE, SKILL_DOMAINS } from "@/lib/data";
+import { SKILL_DOMAINS } from "@/lib/data";
+import { SiJenkins, SiSonarqubeserver, SiArgo, SiPrometheus, SiGrafana, SiDocker, SiTrivy } from "react-icons/si";
 import {
-  Cloud, Workflow, Shield, Boxes, Activity, Sparkles, Layers, Code, Lock, Bug, Radar, Cpu,
+  Cloud, Workflow, Shield, Boxes, Activity, Sparkles, Layers, Code, GitBranch,
 } from "lucide-react";
 
 const ICONS = { cloud: Cloud, workflow: Workflow, shield: Shield, boxes: Boxes, activity: Activity, sparkles: Sparkles, layers: Layers, code: Code };
+
+const PIPELINE_STAGES = [
+  { key: "code", label: "Code", detail: "Signed commits · pre-commit hooks · secret scanning", Icon: GitBranch, accent: "text-white/70" },
+  { key: "build", label: "Docker", detail: "Multi-stage hermetic builds · distroless bases", Icon: SiDocker, accent: "text-[#2496ED]" },
+  { key: "quality", label: "SonarQube", detail: "Static analysis · quality + reliability gates", Icon: SiSonarqubeserver, accent: "text-[#4E9BCD]" },
+  { key: "scan", label: "Trivy", detail: "Container + filesystem CVE scans · SBOM", Icon: SiTrivy, accent: "text-[#1904DA]" },
+  { key: "ci", label: "Jenkins", detail: "Declarative pipeline · parallel stages", Icon: SiJenkins, accent: "text-[#D24939]" },
+  { key: "gitops", label: "Argo CD", detail: "GitOps sync · progressive rollouts", Icon: SiArgo, accent: "text-[#EF7B4D]" },
+  { key: "monitor", label: "Prometheus", detail: "Metrics + alerting · SLO burn rate", Icon: SiPrometheus, accent: "text-[#E6522C]" },
+  { key: "observe", label: "Grafana", detail: "Dashboards · runtime insight", Icon: SiGrafana, accent: "text-[#F46800]" },
+];
 
 export default function DevSecOps() {
   return (
@@ -21,48 +33,51 @@ export default function DevSecOps() {
             </h2>
           </div>
           <p className="max-w-md text-sm text-white/50">
-            Every commit walks the same path — from signed source to attested deployment. No exceptions, only pull requests.
+            Every commit walks the same path — from signed source to observed deployment. No exceptions, only pull requests.
           </p>
         </div>
 
-        {/* Pipeline visualization */}
+        {/* Pipeline visualization with real brand logos */}
         <div className="surface-glass p-6 md:p-10 mb-16">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2 md:gap-3">
-            {DEVSECOPS_PIPELINE.map((stage, i) => (
-              <motion.div
-                key={stage.key}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: i * 0.06 }}
-                className="relative group"
-              >
-                <div className="p-3 border border-white/8 hover:border-cyan-400/40 transition-colors duration-200 h-full">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="h-1.5 w-1.5 rounded-full bg-cyan-400 shadow-[0_0_10px_rgba(0,229,255,0.7)]" />
-                    <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest">
-                      {String(i + 1).padStart(2, "0")}
-                    </span>
+            {PIPELINE_STAGES.map((stage, i) => {
+              const Icon = stage.Icon;
+              return (
+                <motion.div
+                  key={stage.key}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.05 }}
+                  className="relative group"
+                >
+                  <div className="p-3 border border-white/8 hover:border-cyan-400/40 transition-colors duration-200 h-full">
+                    <div className="flex items-center justify-between mb-2">
+                      <Icon className={`h-4 w-4 ${stage.accent}`} aria-hidden />
+                      <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                    <p className="font-cabinet text-base text-white">{stage.label}</p>
+                    <p className="mt-1.5 text-[11px] text-white/45 leading-snug">{stage.detail}</p>
                   </div>
-                  <p className="font-cabinet text-base text-white">{stage.label}</p>
-                  <p className="mt-1.5 text-[11px] text-white/45 leading-snug">{stage.detail}</p>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </div>
         </div>
 
         {/* Skills bento */}
         <div className="grid grid-cols-1 md:grid-cols-6 gap-3 md:gap-4 auto-rows-[minmax(140px,auto)]">
           {SKILL_DOMAINS.map((s, i) => {
-            const Icon = ICONS[s.icon] || Cpu;
+            const Icon = ICONS[s.icon] || Boxes;
             return (
               <motion.div
                 key={s.title}
-                initial={{ opacity: 0, y: 14 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.55, delay: (i % 4) * 0.06 }}
+                transition={{ duration: 0.5, delay: (i % 4) * 0.05 }}
                 className={`${s.span} surface-glass p-5 md:p-6 hover:border-cyan-400/25 transition-colors duration-300 relative overflow-hidden`}
               >
                 <div className="flex items-center gap-3 mb-3">

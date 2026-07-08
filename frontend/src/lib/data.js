@@ -8,12 +8,12 @@ export const PROFILE = {
   summary:
     "Computer Science graduate building at the intersection of Cybersecurity, DevSecOps, Cloud Security and AI. Ranked in the Top 1% globally on TryHackMe with 263+ completed labs and 23 badges. I ship secure CI/CD pipelines, run CTFs for fun, and continuously push my offensive + defensive craft.",
   roles: [
-    "Cybersecurity Engineer",
-    "DevSecOps Practitioner",
-    "Cloud Security Specialist",
-    "AI Security Researcher",
-    "CTF Player",
-    "Penetration Tester",
+    "secure cloud platforms",
+    "zero-trust pipelines",
+    "capture-the-flag wins",
+    "AI security tooling",
+    "DevSecOps at scale",
+    "resilient infrastructure",
   ],
   githubUsername: "Ni7H1N",
   links: {

@@ -6,12 +6,14 @@ import os
 import logging
 import time
 import asyncio
+import uuid
 import httpx
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
-import uuid
 from datetime import datetime, timezone
+
+from ai_agent import ask as ai_ask
 
 
 ROOT_DIR = Path(__file__).parent
@@ -438,6 +440,42 @@ async def submit_contact(payload: ContactMessageCreate):
     doc['created_at'] = doc['created_at'].isoformat()
     await db.contact_messages.insert_one(doc)
     return msg
+
+
+# ============ AI agent (portfolio Q&A) ============
+class ChatIn(BaseModel):
+    session_id: str = Field(..., min_length=8, max_length=64)
+    message: str = Field(..., min_length=1, max_length=2000)
+
+
+class ChatOut(BaseModel):
+    reply: str
+    session_id: str
+
+
+@api_router.post("/ai/chat", response_model=ChatOut)
+async def ai_chat(payload: ChatIn):
+    try:
+        reply = await ai_ask(payload.session_id, payload.message)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=503, detail=str(exc)) from exc
+    except Exception as exc:  # noqa: BLE001 - surface any provider error safely
+        logger.exception("AI chat failed")
+        raise HTTPException(status_code=502, detail=f"AI provider error: {exc}") from exc
+    return ChatOut(reply=reply, session_id=payload.session_id)
+
+
+@api_router.get("/ai/suggestions")
+async def ai_suggestions():
+    return {
+        "suggestions": [
+            "What projects use Kubernetes?",
+            "Show me Nithin's DevSecOps stack",
+            "How does his TryHackMe rank connect to his projects?",
+            "Which certifications back up his AI work?",
+            "Why should I hire Nithin?",
+        ]
+    }
 
 
 app.include_router(api_router)
