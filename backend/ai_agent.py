@@ -191,7 +191,7 @@ _FALLBACK_RULES: list[tuple[tuple[str, ...], str]] = [
         "MedBot AI Healthcare: Flask + MySQL app with appointment scheduling, patient records, billing and a Dialogflow conversational AI assistant. Shipped 2024."
     ),
     (
-        ("contact", "email", "reach", "hire", "connect"),
+        ("contact", "email", "reach", "connect"),
         "You can reach Nithin at nithinkaripalli@gmail.com or +91 9398775370. Links: github.com/Ni7H1N, linkedin.com/in/nithin-karipalli, tryhackme.com/p/Ni7H1N."
     ),
     (

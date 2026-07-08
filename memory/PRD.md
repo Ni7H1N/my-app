@@ -84,3 +84,18 @@ EOF
 - **SEO fix** — replaced default title/description with real Nithin content.
 - **Accessibility** — added visually-hidden DialogTitle to command palette to satisfy Radix a11y contract.
 - **Iter 3 testing**: 15/15 backend, 18/18 frontend features — passed. FCP ~840ms, DCL ~920ms.
+
+## Update — AI Agent + brand icons (iter 4, Feb 2026)
+- **Floating AI Agent widget** — bottom-left cyan pill ("Ask the agent"). Full chat panel with suggestions, persistent per-session localStorage, reset, esc-to-close. Component: `/app/frontend/src/components/effects/AIAgent.jsx`.
+- **Backend AI endpoint** — `POST /api/ai/chat` (Pydantic-validated session_id + message) delegates to `ai_agent.ask()` which uses Gemini via `emergentintegrations`.
+- **Budget-safe fallback** — if the LLM call fails for any reason (Emergent LLM key budget exhausted, network, missing key), `ai_agent.ask()` returns a keyword-matched canned reply grounded in the same FACTS block. 16 keyword rules cover hire pitch, DevSecOps stack, Kubernetes/Docker, cybersecurity practice, CTFs, cloud, AI/ML, certs, projects, Netflix/GPS/MedBot, contact, education, languages and offensive tools. `/api/ai/chat` never returns 5xx — always HTTP 200.
+- **Brand icons** — `react-icons` (Simple Icons) mapped to tech names via `/app/frontend/src/lib/techIcons.js` (with inline SVG marks for AWS/Azure/OpenAI which Simple Icons dropped). DevSecOps pipeline renders 8 brand-colored stages (Code → Docker → SonarQube → Trivy → Jenkins → Argo CD → Prometheus → Grafana).
+- **Bug fix** — previous session broke the build with invalid `SiAmazon`, `SiOpenai`, `SiSonarqube`, `SiGooglecloud` imports. All import names now validated against the installed `react-icons/si` module.
+- **Iter 4 testing**: 21/21 backend pytest (adds TestAIAgent), 14/14 frontend checks. 0 console errors.
+
+## Next tasks (backlog)
+- P2: Top up the Emergent LLM key so the AI agent uses real Gemini responses (fallback still works either way).
+- P2: User replaces `/app/frontend/public/resume.pdf` with a one-page PDF (placeholder present).
+- P2: Silence Radix a11y warning on CommandPalette by wrapping a VisuallyHidden DialogTitle.
+- P3: Migrate FastAPI `on_event("shutdown")` to lifespan handler.
+- P3: Blog/writing MDX section, light-mode toggle, SEO OG images per project, i18n.

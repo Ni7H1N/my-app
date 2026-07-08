@@ -165,7 +165,7 @@ export default function AIAgent() {
                   <div>
                     <p className="font-cabinet text-sm text-white leading-tight">Portfolio Agent</p>
                     <p className="font-mono text-[10px] uppercase tracking-widest text-white/40">
-                      gemini · connects the dots
+                      portfolio · connects the dots
                     </p>
                   </div>
                 </div>
