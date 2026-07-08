@@ -36,12 +36,11 @@ function renderOutput(cmd, arg) {
     case "projects":
       return [
         "featured case studies:",
-        "  01  zero-trust-k8s-platform",
-        "  02  cloud-attack-surface-scanner",
-        "  03  supply-chain-guard",
-        "  04  ai-threat-copilot",
-        "  05  iac-drift-sentinel",
-        "  06  owasp-lab-platform",
+        "  01  netflix-devsecops-pipeline",
+        "  02  gps-intelligence-dashboard",
+        "  03  security-utilities-suite",
+        "  04  ai-fish-catch-prediction",
+        "  05  medbot-ai-healthcare",
         "use view: click a project card above.",
       ];
     case "github":
@@ -196,7 +195,7 @@ export default function TerminalSection() {
             <span className="h-3 w-3 rounded-full bg-white/15" />
             <span className="h-3 w-3 rounded-full bg-white/15" />
             <span className="ml-3 font-mono text-[11px] text-white/40 uppercase tracking-widest">
-              aarav@portfolio: ~/terminal
+              nithin@portfolio: ~/terminal
             </span>
             <button
               data-testid={IDS.terminalClear}

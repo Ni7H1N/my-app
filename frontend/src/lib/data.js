@@ -1,146 +1,155 @@
-// Static content for portfolio sections
+// Static content for portfolio sections — Nithin Karipalli
 export const PROFILE = {
-  name: "Aarav Mehta",
-  handle: "@aaravsec",
-  role: "DevSecOps & Cloud Security Engineer",
-  location: "Remote — GMT+1",
-  status: "Available for select engagements",
+  name: "Nithin Karipalli",
+  handle: "@Ni7H1N",
+  role: "Cybersecurity · Cloud Security · DevSecOps · AI Security",
+  location: "Hyderabad, Telangana · India",
+  status: "Available for internships & full-time roles",
   summary:
-    "I design and operate zero-trust cloud platforms, ship secure supply chains, and automate the boring parts of security. Six years turning ambiguity into reliable infrastructure.",
+    "Computer Science graduate building at the intersection of Cybersecurity, DevSecOps, Cloud Security and AI. Ranked in the Top 1% globally on TryHackMe with 263+ completed labs and 23 badges. I ship secure CI/CD pipelines, run CTFs for fun, and continuously push my offensive + defensive craft.",
   roles: [
-    "DevSecOps Engineer",
-    "Cloud Security Architect",
-    "Platform Engineer",
-    "Automation Specialist",
+    "Cybersecurity Engineer",
+    "DevSecOps Practitioner",
+    "Cloud Security Specialist",
     "AI Security Researcher",
+    "CTF Player",
+    "Penetration Tester",
   ],
+  githubUsername: "Ni7H1N",
   links: {
-    github: "https://github.com/",
-    linkedin: "https://linkedin.com/in/",
-    tryhackme: "https://tryhackme.com/p/",
-    email: "hello@example.com",
-    resume: "#",
+    github: "https://github.com/Ni7H1N",
+    linkedin: "https://in.linkedin.com/in/nithin-karipalli",
+    tryhackme: "https://tryhackme.com/p/Ni7H1N",
+    email: "nithinkaripalli@gmail.com",
+    phone: "+91 9398775370",
+    resume: "/resume.pdf",
   },
 };
 
 export const TECH_TICKER = [
   "AWS", "Azure", "Google Cloud", "Docker", "Kubernetes", "Python", "Linux",
-  "Terraform", "Jenkins", "GitHub Actions", "Argo CD", "Prometheus", "Grafana",
-  "React", "Next.js", "TypeScript", "Burp Suite", "Nmap", "Wireshark", "OpenAI", "Framer Motion",
+  "Jenkins", "GitHub Actions", "Argo CD", "SonarQube", "Trivy", "Prometheus", "Grafana",
+  "Burp Suite", "Nmap", "Wireshark", "Metasploit", "SQLMap", "TryHackMe", "OWASP",
 ];
 
 export const DEVSECOPS_PIPELINE = [
   { key: "code", label: "Code", detail: "Signed commits, pre-commit hooks, secret scanning" },
-  { key: "build", label: "Build", detail: "Hermetic multi-stage builds, distroless bases" },
-  { key: "test", label: "Test", detail: "Unit, integration, contract, mutation coverage" },
-  { key: "sast", label: "SAST", detail: "Semgrep, CodeQL, dependency review" },
-  { key: "scan", label: "Scan", detail: "Trivy image + fs, Grype, license policy" },
-  { key: "sign", label: "Sign", detail: "Cosign keyless, SLSA provenance, Rekor log" },
-  { key: "deploy", label: "Deploy", detail: "Argo CD progressive rollout, Kyverno gates" },
-  { key: "observe", label: "Observe", detail: "OpenTelemetry, SLOs, Falco runtime" },
+  { key: "build", label: "Build", detail: "Multi-stage Docker images, minimal base layers" },
+  { key: "quality", label: "SonarQube", detail: "Static code analysis + quality gates" },
+  { key: "scan", label: "Trivy", detail: "Container + filesystem CVE scans" },
+  { key: "ci", label: "Jenkins", detail: "Automated build & test pipeline" },
+  { key: "gitops", label: "Argo CD", detail: "GitOps continuous delivery to Kubernetes" },
+  { key: "monitor", label: "Prometheus", detail: "Metrics collection + alerting" },
+  { key: "observe", label: "Grafana", detail: "Dashboards, SLOs, incident insight" },
 ];
 
 export const SKILL_DOMAINS = [
   {
-    title: "Cloud Engineering",
-    items: ["AWS", "Azure", "GCP", "Landing Zones", "Multi-Account", "Networking", "Serverless"],
-    span: "col-span-1 md:col-span-2 md:row-span-2",
-    icon: "cloud",
-  },
-  {
-    title: "DevSecOps",
-    items: ["CI/CD", "GitOps", "IaC", "SBOM", "SLSA", "Cosign", "Argo CD"],
-    span: "col-span-1 md:col-span-2",
-    icon: "workflow",
-  },
-  {
     title: "Cybersecurity",
-    items: ["OWASP Top 10", "Threat Modeling", "Recon", "Burp", "Nmap", "Wireshark"],
-    span: "col-span-1 md:col-span-2",
+    items: ["Penetration Testing", "Vulnerability Assessment", "OWASP Top 10", "Threat Intelligence", "Reconnaissance", "Cryptography", "Web AppSec"],
+    span: "col-span-1 md:col-span-3 md:row-span-2",
     icon: "shield",
   },
   {
-    title: "Containers & Orchestration",
-    items: ["Docker", "Kubernetes", "Helm", "Cilium", "Kyverno", "OPA"],
+    title: "DevSecOps",
+    items: ["Docker", "Kubernetes", "Jenkins", "Argo CD", "GitHub Actions", "SonarQube", "Trivy"],
+    span: "col-span-1 md:col-span-3",
+    icon: "workflow",
+  },
+  {
+    title: "Cloud Platforms",
+    items: ["AWS (EC2, IAM, S3)", "Microsoft Azure", "Google Cloud Platform"],
+    span: "col-span-1 md:col-span-3",
+    icon: "cloud",
+  },
+  {
+    title: "Security Tools",
+    items: ["Burp Suite", "Nmap", "Wireshark", "SQLMap", "Hydra", "Gobuster", "John the Ripper", "Metasploit"],
     span: "col-span-1 md:col-span-3",
     icon: "boxes",
   },
   {
     title: "Observability",
-    items: ["Prometheus", "Grafana", "Loki", "Tempo", "OpenTelemetry"],
+    items: ["Prometheus", "Grafana", "Log Analysis"],
     span: "col-span-1 md:col-span-3",
     icon: "activity",
   },
   {
-    title: "AI & Automation",
-    items: ["Python", "OpenAI", "LangChain", "RAG", "n8n", "GitHub Actions"],
-    span: "col-span-1 md:col-span-2",
+    title: "AI & LLMs",
+    items: ["Generative AI", "LLMs", "Prompt Engineering", "AI Security", "Python"],
+    span: "col-span-1 md:col-span-3",
     icon: "sparkles",
   },
   {
-    title: "Infrastructure as Code",
-    items: ["Terraform", "Terragrunt", "Ansible", "Pulumi", "CloudFormation"],
-    span: "col-span-1 md:col-span-2",
-    icon: "layers",
+    title: "Languages",
+    items: ["Python", "JavaScript", "TypeScript", "SQL", "Bash"],
+    span: "col-span-1 md:col-span-3",
+    icon: "code",
   },
   {
-    title: "Languages",
-    items: ["Python", "Go", "TypeScript", "Bash", "Rego", "HCL"],
-    span: "col-span-1 md:col-span-2",
-    icon: "code",
+    title: "Operating Systems",
+    items: ["Kali Linux", "Ubuntu", "Windows"],
+    span: "col-span-1 md:col-span-3",
+    icon: "layers",
   },
 ];
 
+// Repurposed "Experience" cards → Achievements & Highlights (Nithin is a fresh grad)
 export const EXPERIENCE = [
   {
-    company: "Northwind Cloud",
-    role: "Staff DevSecOps Engineer",
+    company: "TryHackMe",
+    role: "Top 1% Global · 263+ labs · 23 badges",
     period: "2023 — Present",
+    location: "Online",
+    bullets: [
+      "Ranked inside the global Top 1% of TryHackMe with 263+ completed hands-on cybersecurity labs.",
+      "Earned 23+ badges across web exploitation, network security, forensics, reverse engineering, and cryptography.",
+      "Regularly practices offensive and defensive techniques on live vulnerable machines.",
+    ],
+  },
+  {
+    company: "Capture The Flag competitions",
+    role: "Top 100 Performer · 3rd Place · CTF Player",
+    period: "2024 — 2025",
+    location: "Multiple Events",
+    bullets: [
+      "Recognized as a Top 100 Performer in the Great AppSec Hackathon CTF.",
+      "Secured 3rd place at the Overnight CTF organized by The Hackers Meetup · Nagpur Chapter.",
+      "Solved challenges across web, forensics, reverse engineering, cryptography, and binary exploitation.",
+    ],
+  },
+  {
+    company: "Self-directed engineering",
+    role: "DevSecOps & Cloud Security projects",
+    period: "2024 — Present",
     location: "Remote",
     bullets: [
-      "Led migration of 200+ services to a zero-trust EKS platform with Argo CD and Cilium.",
-      "Reduced mean-time-to-remediate cloud misconfigurations from 11 days to 18 hours.",
-      "Built SLSA-3 supply chain with Sigstore; blocked 100% of unsigned images at admission.",
-    ],
-  },
-  {
-    company: "Helix Security",
-    role: "Senior Cloud Security Engineer",
-    period: "2021 — 2023",
-    location: "London",
-    bullets: [
-      "Owned AWS Landing Zone for a 40-account org with per-team detective + preventative guardrails.",
-      "Shipped an in-house attack surface scanner adopted across 6 product teams.",
-    ],
-  },
-  {
-    company: "Orbit Labs",
-    role: "Platform Engineer",
-    period: "2019 — 2021",
-    location: "Berlin",
-    bullets: [
-      "Rebuilt CI/CD from Jenkins to GitHub Actions + Argo CD, cutting deploy times by 70%.",
-      "Introduced Terraform modules used by 30+ engineers.",
+      "Built an end-to-end DevSecOps pipeline with Docker, Jenkins, Kubernetes, Argo CD, SonarQube, Trivy, Prometheus and Grafana.",
+      "Shipped multiple open-source security utilities on GitHub (scanners, log analysers, WASM tools).",
+      "Hands-on experience solving Azure security challenges and cloud-based CTF environments.",
     ],
   },
 ];
 
 export const CERTIFICATIONS = [
-  { name: "AWS Certified Security — Specialty", issuer: "Amazon Web Services", year: "2024", id: "SCS-C02" },
-  { name: "Certified Kubernetes Security Specialist", issuer: "CNCF", year: "2024", id: "CKS" },
-  { name: "AWS Certified Solutions Architect — Professional", issuer: "Amazon Web Services", year: "2023", id: "SAP-C02" },
-  { name: "Microsoft Azure Security Engineer Associate", issuer: "Microsoft", year: "2023", id: "AZ-500" },
-  { name: "HashiCorp Certified: Terraform Associate", issuer: "HashiCorp", year: "2022", id: "003" },
-  { name: "OSCP", issuer: "Offensive Security", year: "2022", id: "OS-101" },
-  { name: "Certified Kubernetes Administrator", issuer: "CNCF", year: "2021", id: "CKA" },
+  { name: "Certified in Cybersecurity (CC)", issuer: "ISC2", year: "2024", id: "ISC2-CC" },
+  { name: "Introduction to Cybersecurity", issuer: "Cisco Networking Academy", year: "2024", id: "CISCO-INTRO" },
+  { name: "Cybersecurity Essentials", issuer: "Cisco Networking Academy", year: "2024", id: "CISCO-ESS" },
+  { name: "Foundation Level Threat Intelligence Analyst", issuer: "ArcX", year: "2024", id: "ARCX-FL" },
+  { name: "Learn Bug Bounty Hunting & Web Security Testing", issuer: "Udemy", year: "2024", id: "UDEMY-BB" },
+  { name: "Introduction to Generative AI", issuer: "Google Cloud Skills Boost", year: "2024", id: "GCP-GENAI" },
+  { name: "Introduction to Large Language Models", issuer: "Google Cloud Skills Boost", year: "2024", id: "GCP-LLM" },
+  { name: "Introduction to Image Generation", issuer: "Google Cloud Skills Boost", year: "2024", id: "GCP-IMG" },
 ];
 
 export const EDUCATION = [
-  { school: "TU Munich", degree: "M.Sc. Computer Science — Systems Security", period: "2017 — 2019" },
-  { school: "IIT Bombay", degree: "B.Tech. Computer Science", period: "2013 — 2017" },
+  {
+    school: "Vignan's Institute of Information Technology (Autonomous)",
+    degree: "B.Tech · Computer Science and Engineering",
+    period: "2022 — 2026",
+  },
 ];
 
-// Globe network arcs (source/target coords)
 export const GLOBE_ARCS = [
   { startLat: 37.7749, startLng: -122.4194, endLat: 51.5074, endLng: -0.1278 },
   { startLat: 51.5074, startLng: -0.1278, endLat: 1.3521, endLng: 103.8198 },
@@ -148,8 +157,8 @@ export const GLOBE_ARCS = [
   { startLat: -33.8688, startLng: 151.2093, endLat: 35.6895, endLng: 139.6917 },
   { startLat: 35.6895, startLng: 139.6917, endLat: 37.7749, endLng: -122.4194 },
   { startLat: 40.7128, startLng: -74.006, endLat: 52.52, endLng: 13.405 },
-  { startLat: 52.52, startLng: 13.405, endLat: 19.076, endLng: 72.8777 },
-  { startLat: 19.076, startLng: 72.8777, endLat: -23.5505, endLng: -46.6333 },
+  { startLat: 52.52, startLng: 13.405, endLat: 17.385, endLng: 78.4867 },
+  { startLat: 17.385, startLng: 78.4867, endLat: -23.5505, endLng: -46.6333 },
   { startLat: -23.5505, startLng: -46.6333, endLat: 40.7128, endLng: -74.006 },
   { startLat: 55.7558, startLng: 37.6173, endLat: 48.8566, endLng: 2.3522 },
 ];
@@ -163,7 +172,7 @@ export const GLOBE_POINTS = [
   { lat: 1.3521, lng: 103.8198, label: "ap-southeast-1", size: 0.6 },
   { lat: 35.6895, lng: 139.6917, label: "ap-northeast-1", size: 0.6 },
   { lat: -33.8688, lng: 151.2093, label: "ap-southeast-2", size: 0.5 },
-  { lat: 19.076, lng: 72.8777, label: "ap-south-1", size: 0.5 },
+  { lat: 17.385, lng: 78.4867, label: "hyderabad · home", size: 0.9 },
   { lat: -23.5505, lng: -46.6333, label: "sa-east-1", size: 0.4 },
   { lat: 55.7558, lng: 37.6173, label: "ru-central-1", size: 0.3 },
 ];

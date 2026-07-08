@@ -42,7 +42,7 @@ export default function Navbar() {
             <Terminal className="h-4 w-4 text-cyan-400" />
           </div>
           <span className="font-mono text-sm text-white/80 tracking-tight">
-            aarav<span className="text-cyan-400">/</span>sec
+            ni7h1n<span className="text-cyan-400">/</span>sec
           </span>
         </Link>
 
@@ -59,11 +59,20 @@ export default function Navbar() {
           ))}
         </nav>
 
-        <div className="hidden md:flex">
+        <div className="hidden md:flex items-center gap-3">
+          <a
+            href="/resume.pdf"
+            target="_blank"
+            rel="noreferrer"
+            data-testid="nav-resume-download"
+            className="px-4 py-2 border border-white/15 hover:border-cyan-400/60 hover:bg-white/[0.04] text-sm text-white font-mono uppercase tracking-wider transition-colors duration-200"
+          >
+            Resume
+          </a>
           <a
             href="#contact"
             data-testid={IDS.navResumeBtn}
-            className="px-4 py-2 border border-white/15 hover:border-cyan-400/60 hover:bg-white/[0.04] text-sm text-white font-mono uppercase tracking-wider transition-colors duration-200"
+            className="px-4 py-2 bg-white text-black hover:bg-cyan-400 text-sm font-mono uppercase tracking-wider transition-colors duration-200"
           >
             Get in touch
           </a>
@@ -97,6 +106,15 @@ export default function Navbar() {
                   {l.label}
                 </a>
               ))}
+              <a
+                href="/resume.pdf"
+                target="_blank"
+                rel="noreferrer"
+                onClick={() => setOpen(false)}
+                className="font-mono text-sm text-cyan-400 hover:text-white uppercase tracking-widest"
+              >
+                Resume ↓
+              </a>
             </div>
           </motion.div>
         )}

@@ -12,7 +12,7 @@ export default function Experience() {
               {"// 07 · trajectory"}
             </p>
             <h2 className="mt-4 font-cabinet text-4xl sm:text-5xl lg:text-6xl leading-[1] tracking-tight">
-              <span className="text-metallic">Experience</span>{" "}
+              <span className="text-metallic">Highlights</span>{" "}
               <span className="text-white/60">& education.</span>
             </h2>
           </div>

@@ -4,6 +4,9 @@ from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 import logging
+import time
+import asyncio
+import httpx
 from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional
@@ -17,6 +20,8 @@ load_dotenv(ROOT_DIR / '.env')
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
+
+GITHUB_USERNAME = os.environ.get('GITHUB_USERNAME', 'Ni7H1N')
 
 app = FastAPI(title="Engineering Portfolio API")
 api_router = APIRouter(prefix="/api")
@@ -49,11 +54,6 @@ class ContactMessage(BaseModel):
     subject: str
     message: str
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-
-class TechBadge(BaseModel):
-    name: str
-    category: str
 
 
 class Project(BaseModel):
@@ -93,308 +93,266 @@ class Repo(BaseModel):
     html_url: str
 
 
-# ============ Static content ============
+# ============ Real projects (Nithin Karipalli) ============
+IMG_INFRA = "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwZGFya3xlbnwwfHx8fDE3ODM1MzYyNTR8MA&ixlib=rb-4.1.0&q=85"
+IMG_CODE = "https://images.pexels.com/photos/2653362/pexels-photo-2653362.jpeg"
+IMG_TOWER = "https://images.pexels.com/photos/37994983/pexels-photo-37994983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+
+GITHUB_PROFILE = f"https://github.com/{GITHUB_USERNAME}"
+
 PROJECTS: List[dict] = [
     {
         "id": "p1",
-        "slug": "zero-trust-k8s-platform",
-        "title": "Zero-Trust Kubernetes Platform",
-        "summary": "Multi-tenant EKS platform with policy-as-code, mTLS service mesh, and drift-free GitOps.",
-        "description": "Production-grade Kubernetes platform designed under zero-trust principles. Enforces workload identity, network segmentation via Cilium, image provenance via Cosign/Sigstore, and continuous compliance with OPA/Kyverno. Deployment is fully declarative through Argo CD.",
-        "image": "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwZGFya3xlbnwwfHx8fDE3ODM1MzYyNTR8MA&ixlib=rb-4.1.0&q=85",
-        "tech": ["AWS EKS", "Terraform", "Argo CD", "Cilium", "Kyverno", "Sigstore", "Vault", "Prometheus"],
-        "tags": ["DevSecOps", "Cloud", "Kubernetes"],
+        "slug": "netflix-devsecops-pipeline",
+        "title": "Netflix DevSecOps Pipeline",
+        "summary": "End-to-end DevSecOps pipeline with Docker, Jenkins, Kubernetes, Argo CD, SonarQube, Trivy, Prometheus and Grafana.",
+        "description": "A production-style DevSecOps pipeline that deploys a Netflix-clone web application through a fully automated CI/CD flow. Every commit runs static analysis, container CVE scanning, image build, GitOps deploy to Kubernetes and live monitoring — a hands-on demonstration of secure software delivery.",
+        "image": IMG_INFRA,
+        "tech": ["Jenkins", "Docker", "Kubernetes", "Argo CD", "SonarQube", "Trivy", "Prometheus", "Grafana"],
+        "tags": ["DevSecOps", "Cloud", "Automation"],
         "year": "2025",
-        "status": "Production",
-        "github_url": "https://github.com/example/zero-trust-eks",
+        "status": "Shipped",
+        "github_url": GITHUB_PROFILE,
         "demo_url": None,
         "featured": True,
-        "problem": "Legacy multi-tenant Kubernetes had inconsistent RBAC, untracked cluster drift, and no verifiable supply-chain guarantees for images running in production.",
+        "problem": "Building software without embedded security creates blind spots — vulnerable dependencies, unscanned containers and unmonitored production. This project answers that with a fully instrumented CI/CD.",
         "objectives": [
-            "Establish workload identity and namespace-level zero-trust boundaries",
-            "Guarantee GitOps-only mutations with drift detection",
-            "Enforce signed, scanned, SBOM-attested container images",
-            "Achieve continuous compliance evidence for SOC2 / ISO 27001",
+            "Automate build, test and deploy for a real-world web application",
+            "Embed code-quality and CVE gates before any image reaches production",
+            "Adopt GitOps so cluster state matches the repository at all times",
+            "Deliver observability from day one via Prometheus + Grafana",
         ],
-        "architecture": "Terraform provisions VPC, EKS, IRSA, KMS, and Vault. Cilium provides eBPF-based network policy and Hubble observability. Argo CD manages application delivery. Kyverno + OPA Gatekeeper enforce cluster policies. Cosign + Sigstore Rekor sign and verify every image; Trivy generates SBOMs written to an OCI registry.",
+        "architecture": "Jenkins orchestrates the pipeline. Source is analysed by SonarQube; Docker images are scanned by Trivy and pushed to a registry. Argo CD watches a Git repo and continuously reconciles the desired state onto a Kubernetes cluster. Prometheus scrapes cluster + application metrics; Grafana visualises SLOs and alerting.",
         "implementation": [
-            "Terraform modules split by environment with remote state encrypted in S3 + DynamoDB locking",
-            "Argo CD app-of-apps pattern with per-tenant projects and sync waves",
-            "Kyverno policies deny unsigned images and enforce runAsNonRoot, readOnlyRootFilesystem",
-            "Cilium ClusterMesh for cross-region service discovery with mTLS via SPIFFE",
-            "Prometheus + Loki + Tempo bundled through OpenTelemetry collector",
+            "Jenkins declarative pipeline: checkout → SAST (SonarQube) → build → Trivy scan → push → Argo CD sync",
+            "Kubernetes manifests kept in Git as single source of truth",
+            "Argo CD app-of-apps pattern for environment promotion",
+            "Prometheus + Grafana stack deployed via Helm with pre-baked dashboards",
         ],
         "challenges": [
-            "Migrating live workloads without downtime while flipping default-deny NetworkPolicies",
-            "Reconciling image signature verification latency in air-gapped clusters",
+            "Balancing image scan latency with pipeline speed",
+            "Configuring RBAC + service accounts across Argo CD, Jenkins and Trivy",
         ],
         "security_measures": [
-            "IRSA-scoped IAM per workload, no node-wide credentials",
-            "KMS envelope encryption for etcd + secrets",
-            "Falco runtime detection with routed alerts to SIEM",
-            "Kyverno admission-time policy enforcement",
+            "SonarQube quality gate blocks merges on critical smells / vulns",
+            "Trivy hard-fails builds on HIGH/CRITICAL CVEs",
+            "Least-privilege service accounts on Kubernetes",
         ],
         "devsecops_pipeline": [
-            "GitHub Actions: lint, unit, SAST (Semgrep), secret scan (Gitleaks)",
-            "Build: multi-stage Docker with distroless base",
-            "Scan: Trivy (fs + image) + Grype; SBOM published to registry",
-            "Sign: Cosign with keyless OIDC identity",
-            "Deploy: Argo CD auto-sync with policy gates",
+            "Checkout · SonarQube SAST · Build · Trivy image scan · Push · Argo CD sync · Prometheus metrics · Grafana alerting",
         ],
         "cloud_architecture": [
-            "Multi-AZ EKS with managed node groups + Karpenter",
-            "PrivateLink endpoints, no public egress by default",
-            "Route 53 + AWS Global Accelerator for anycast entry",
+            "Kubernetes cluster with dedicated namespaces per environment",
+            "Ingress controller for external traffic + TLS termination",
         ],
         "lessons_learned": [
-            "Policy-as-code beats runbooks — every exception must be a PR",
-            "Signed images are cheap; verifying at admission is the leverage point",
+            "Security gates work best when integrated into the pipeline, not bolted on later",
+            "Observability from day one saves days of debugging",
         ],
         "future_improvements": [
-            "Adopt Cedar for finer-grained authorization",
-            "Extend supply-chain guarantees to Helm chart signing",
+            "Add supply-chain signing with Cosign + policy enforcement via Kyverno",
+            "Integrate Falco runtime detection",
         ],
     },
     {
         "id": "p2",
-        "slug": "cloud-attack-surface-scanner",
-        "title": "Cloud Attack Surface Scanner",
-        "summary": "Continuously enumerates AWS + Azure exposure, correlates with CVEs, and files auto-remediation PRs.",
-        "description": "Agentless scanner that reads cloud APIs, models a graph of assets, and continuously evaluates exposure against threat intel feeds. Findings are triaged, deduplicated, and either auto-fixed via Terraform PRs or escalated to on-call.",
-        "image": "https://images.pexels.com/photos/2653362/pexels-photo-2653362.jpeg",
-        "tech": ["Python", "Neo4j", "AWS", "Azure", "OpenAI", "Terraform", "GitHub Actions"],
-        "tags": ["Cybersecurity", "Cloud", "Automation"],
+        "slug": "gps-intelligence-dashboard",
+        "title": "GPS Intelligence Dashboard",
+        "summary": "Interactive geospatial dashboard fusing GPS telemetry with AI-powered prediction models.",
+        "description": "A modern geospatial intelligence dashboard that ingests GPS data, visualises movement patterns and layers AI-driven predictions on top. Designed with Next.js on the frontend and Python for the ML backend.",
+        "image": IMG_TOWER,
+        "tech": ["Next.js", "React", "Python", "Flask", "Machine Learning", "Tailwind"],
+        "tags": ["AI", "Cloud", "Automation"],
         "year": "2025",
         "status": "Live",
-        "github_url": "https://github.com/example/cloud-asm",
+        "github_url": GITHUB_PROFILE,
         "demo_url": None,
         "featured": True,
-        "problem": "Security teams could not keep pace with ephemeral cloud assets — misconfigurations were found days after exposure, and remediation stalled in ticket queues.",
+        "problem": "Raw GPS traces are hard to reason about — a dashboard is needed that both visualises movement and surfaces predictions humans can act on.",
         "objectives": [
-            "Provide < 5 minute detection window for new public exposure",
-            "Reduce mean-time-to-remediate below 24 hours",
-            "Explain each finding in plain English for engineering teams",
+            "Render live GPS traces on an interactive map",
+            "Predict short-horizon movement using a Python ML model",
+            "Ship a UI recruiters can click through in under a minute",
         ],
-        "architecture": "A Python worker pool pulls inventory via boto3 / azure-sdk, materializes assets into Neo4j, then evaluates rule graphs. An LLM layer translates findings into engineer-friendly summaries and drafts Terraform patch PRs.",
+        "architecture": "Next.js SSR frontend consumes a Python Flask API. The API loads a serialised ML model and returns predictions per request. State is kept in the URL for shareable views.",
         "implementation": [
-            "Async workers with exponential backoff + jitter",
-            "Neo4j graph modelling identity, network, and data-plane relationships",
-            "Rule engine using OPA Rego for evaluated policy",
-            "LLM prompt templates versioned in Git; outputs validated by JSON schema",
-        ],
-        "challenges": [
-            "API rate limits on multi-account scans",
-            "False-positive suppression across environments",
+            "Custom map layer with animated markers and trail rendering",
+            "Prediction endpoint with cached model in memory",
+            "Responsive UI with keyboard shortcuts",
         ],
         "security_measures": [
-            "Read-only roles with session tags",
-            "STS session credentials with 15-minute TTL",
-            "Provenance-signed remediation PRs",
-        ],
-        "devsecops_pipeline": [
-            "Pre-commit: ruff, black, mypy",
-            "CI: pytest, coverage gate 85%, container scan",
-            "CD: canary rollout to staging tenants, then GA",
-        ],
-        "cloud_architecture": [
-            "Serverless-first: Lambda + SQS + Step Functions",
-            "S3 with Object Lock for evidence retention",
+            "Input validation on all API endpoints",
+            "CORS locked to the frontend origin",
         ],
         "lessons_learned": [
-            "Graph modelling makes lateral-movement analysis natural",
-            "Ship a PR, not a ticket",
-        ],
-        "future_improvements": [
-            "Add GCP + Kubernetes providers",
-            "Cross-tenant blast-radius simulation",
+            "AI features only earn trust when their inputs and outputs are visible on the same screen",
         ],
     },
     {
         "id": "p3",
-        "slug": "supply-chain-guard",
-        "title": "Supply Chain Guard",
-        "summary": "SLSA-3 build attestations, Cosign verification, and dependency risk scoring on every commit.",
-        "description": "End-to-end supply chain assurance for polyglot monorepos. Enforces reproducible builds, generates SLSA provenance, and blocks deploys that fail signature or SBOM policy at admission time.",
-        "image": "https://images.pexels.com/photos/37994983/pexels-photo-37994983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
-        "tech": ["Sigstore", "SLSA", "Cosign", "GitHub Actions", "Kyverno", "Go"],
-        "tags": ["DevSecOps", "Security"],
+        "slug": "security-utilities-suite",
+        "title": "Security Utilities Suite",
+        "summary": "A collection of open-source security tools — server scanner, log analyser, LCS scanner, password strength WASM and Caesar cipher.",
+        "description": "Five hands-on security utilities published on GitHub. Each solves a small, real problem and demonstrates a different aspect of applied cybersecurity — network probing, log correlation, cryptography, and browser-native cryptography via WebAssembly.",
+        "image": IMG_CODE,
+        "tech": ["Python", "JavaScript", "WebAssembly", "Bash", "Nginx"],
+        "tags": ["Cybersecurity", "Automation"],
         "year": "2024",
-        "status": "Production",
-        "github_url": "https://github.com/example/supply-chain-guard",
+        "status": "Open Source",
+        "github_url": GITHUB_PROFILE,
         "demo_url": None,
         "featured": True,
-        "problem": "Downstream consumers had no cryptographic guarantee that images running in production matched the source that produced them.",
+        "problem": "Security tooling is often heavy, GUI-driven, or locked behind licenses. Small, focused CLI utilities close the gap for day-to-day defensive work.",
         "objectives": [
-            "Attain SLSA level 3 for all default branches",
-            "Zero unsigned images admitted to production clusters",
+            "Ship five focused utilities, each doing one thing well",
+            "Prioritise minimal dependencies + readable code",
+            "Publish everything to GitHub under a permissive licence",
         ],
-        "architecture": "GitHub Actions produce hermetic builds using ephemeral runners. Provenance is attested with Sigstore and stored in a Rekor transparency log. Kyverno verifies attestations at admission.",
         "implementation": [
-            "Reusable workflows for build + sign + attest",
-            "Attestation predicate types: SLSA provenance + SBOM + vulnerability report",
-            "Kyverno ClusterPolicy verifyImages with keyless issuers",
-        ],
-        "challenges": [
-            "Balancing signing latency with deploy cadence",
-            "Educating teams on ephemeral OIDC identity",
+            "Server Scanner — port + service enumeration wrapper",
+            "Nginx Log Analyzer — parses access logs, flags anomalies",
+            "LCS Scanner — longest common subsequence for text similarity",
+            "Password Strength WASM Tool — client-side entropy scoring",
+            "Caesar Cipher Tool — classical crypto teaching aid",
         ],
         "security_measures": [
-            "Isolated OIDC identity per workflow",
-            "Rekor inclusion proofs stored alongside deploys",
-        ],
-        "devsecops_pipeline": [
-            "Lint / test / build / SBOM / sign / attest / verify",
-        ],
-        "cloud_architecture": [
-            "OIDC federation between GitHub and AWS",
+            "All utilities run without elevated privileges",
+            "No telemetry or outbound calls",
         ],
         "lessons_learned": [
-            "Provenance is worth more than any scanner report",
-        ],
-        "future_improvements": [
-            "Move to reproducible builds with Bazel",
+            "Small tools compose into a personal security workflow better than any monolith",
         ],
     },
     {
         "id": "p4",
-        "slug": "ai-threat-copilot",
-        "title": "AI Threat Copilot",
-        "summary": "LLM-assisted SOC copilot that triages alerts, drafts IR playbooks, and enriches with MITRE ATT&CK context.",
-        "description": "A copilot for security operations that ingests SIEM alerts, correlates with threat intel, and drafts investigation notes and containment steps for analysts to review and approve.",
-        "image": "https://images.pexels.com/photos/2653362/pexels-photo-2653362.jpeg",
-        "tech": ["Python", "OpenAI", "Elasticsearch", "MITRE ATT&CK", "FastAPI", "Redis"],
-        "tags": ["AI", "Cybersecurity", "Automation"],
+        "slug": "ai-fish-catch-prediction",
+        "title": "AI Fish Catch Prediction",
+        "summary": "Machine learning application predicting fish catch from environmental data, with an interactive dashboard.",
+        "description": "A Python + Flask machine learning app that takes environmental variables and predicts fish catch probabilities. Includes preprocessing pipelines and a visual dashboard for exploration.",
+        "image": IMG_INFRA,
+        "tech": ["Python", "Flask", "scikit-learn", "Pandas", "Chart.js"],
+        "tags": ["AI", "Automation"],
         "year": "2024",
-        "status": "Beta",
-        "github_url": "https://github.com/example/threat-copilot",
+        "status": "Shipped",
+        "github_url": GITHUB_PROFILE,
         "demo_url": None,
         "featured": False,
-        "problem": "SOC analysts spent 60% of their day on tier-1 triage, leaving little time for hunting or engineering.",
+        "problem": "Small-scale fishing decisions rely on intuition. This project explores whether a lightweight ML model can add signal on top of environmental telemetry.",
         "objectives": [
-            "Cut tier-1 triage time by 70%",
-            "Preserve full audit trail of AI decisions",
+            "Ingest and clean environmental datasets",
+            "Train and evaluate a baseline predictive model",
+            "Surface results in an interactive dashboard",
         ],
-        "architecture": "Alerts fan out from SIEM to a queue. Python workers enrich with MITRE mappings, ask the LLM for a hypothesis, and post a structured note back into the ticketing system.",
         "implementation": [
-            "Structured output validation with Pydantic",
-            "Retrieval-augmented context from a curated IR playbook corpus",
-            "Human-in-the-loop approval before any containment action",
-        ],
-        "challenges": [
-            "Hallucination guardrails for security-critical output",
-        ],
-        "security_measures": [
-            "No PII sent to LLM without redaction pass",
-            "Cryptographic hashing of prompts and responses for audit",
-        ],
-        "devsecops_pipeline": [
-            "Prompt regression tests on every PR",
-        ],
-        "cloud_architecture": [
-            "VPC-private inference gateway",
+            "Pandas preprocessing pipeline with feature engineering",
+            "scikit-learn baseline model with cross-validation",
+            "Flask API serving predictions to a JS dashboard",
         ],
         "lessons_learned": [
-            "Copilot > autopilot for security",
-        ],
-        "future_improvements": [
-            "Fine-tune small local model for redaction",
+            "A well-cleaned dataset beats a fancy model every time",
         ],
     },
     {
         "id": "p5",
-        "slug": "iac-drift-sentinel",
-        "title": "IaC Drift Sentinel",
-        "summary": "Detects and reconciles Terraform drift across 200+ AWS accounts with per-team ownership routing.",
-        "description": "Continuous drift detection service for large Terraform footprints. Diffs live state vs planned state, categorizes drift by severity, and routes tickets to owning teams with a suggested reconciliation plan.",
-        "image": "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwZGFya3xlbnwwfHx8fDE3ODM1MzYyNTR8MA&ixlib=rb-4.1.0&q=85",
-        "tech": ["Go", "Terraform", "AWS Organizations", "Slack", "PostgreSQL"],
-        "tags": ["Cloud", "Automation", "DevOps"],
+        "slug": "medbot-ai-healthcare",
+        "title": "MedBot — AI Healthcare Management",
+        "summary": "Healthcare management platform combining Flask + MySQL with a Dialogflow conversational AI layer.",
+        "description": "A Flask-based healthcare management system with appointment scheduling, patient records, billing and a Dialogflow-powered chatbot that assists patients and staff in natural language.",
+        "image": IMG_CODE,
+        "tech": ["Python", "Flask", "MySQL", "Dialogflow", "HTML", "CSS"],
+        "tags": ["AI", "Automation"],
         "year": "2024",
-        "status": "Production",
-        "github_url": "https://github.com/example/iac-drift-sentinel",
+        "status": "Shipped",
+        "github_url": GITHUB_PROFILE,
         "demo_url": None,
         "featured": False,
-    },
-    {
-        "id": "p6",
-        "slug": "owasp-lab-platform",
-        "title": "OWASP Lab Platform",
-        "summary": "Self-service, ephemeral CTF labs for OWASP Top 10 training with per-user isolated Kubernetes namespaces.",
-        "description": "Training platform that spins up per-user vulnerable environments on demand for OWASP Top 10, network recon, and cloud attack scenarios. Auto-destructs after 4 hours.",
-        "image": "https://images.pexels.com/photos/2653362/pexels-photo-2653362.jpeg",
-        "tech": ["Kubernetes", "Helm", "Vault", "React", "FastAPI"],
-        "tags": ["Cybersecurity", "Education"],
-        "year": "2023",
-        "status": "Live",
-        "github_url": "https://github.com/example/owasp-lab",
-        "demo_url": None,
-        "featured": False,
+        "problem": "Healthcare admin workflows are still fragmented across paper, spreadsheets and disconnected apps.",
+        "objectives": [
+            "Consolidate appointment, patient and billing management in one platform",
+            "Layer a conversational assistant to reduce staff overhead",
+        ],
+        "implementation": [
+            "Relational schema for patients, appointments, invoices",
+            "Dialogflow intents for common queries + fulfillment endpoints",
+        ],
+        "security_measures": [
+            "Parameterised SQL queries throughout",
+            "Session-based auth with hashed passwords",
+        ],
     },
 ]
 
 
-REPOS: List[dict] = [
-    {
-        "name": "zero-trust-eks",
-        "description": "Zero-trust multi-tenant EKS reference platform with Argo CD, Cilium, Kyverno and Sigstore.",
-        "language": "HCL",
-        "stars": 421,
-        "forks": 58,
-        "updated_at": "2025-11-12",
-        "topics": ["kubernetes", "devsecops", "terraform", "argo-cd", "zero-trust"],
-        "html_url": "https://github.com/example/zero-trust-eks",
-    },
-    {
-        "name": "cloud-asm",
-        "description": "Attack surface management for AWS and Azure with graph-based reasoning and auto-remediation PRs.",
-        "language": "Python",
-        "stars": 312,
-        "forks": 41,
-        "updated_at": "2025-10-28",
-        "topics": ["cloud-security", "asm", "aws", "azure", "graph"],
-        "html_url": "https://github.com/example/cloud-asm",
-    },
-    {
-        "name": "supply-chain-guard",
-        "description": "SLSA-3 provenance, Cosign verification and Kyverno admission policies for hardened supply chains.",
-        "language": "Go",
-        "stars": 289,
-        "forks": 34,
-        "updated_at": "2025-09-14",
-        "topics": ["sigstore", "slsa", "supply-chain", "cosign"],
-        "html_url": "https://github.com/example/supply-chain-guard",
-    },
-    {
-        "name": "threat-copilot",
-        "description": "LLM-powered SOC copilot for alert triage, IR drafting and MITRE ATT&CK enrichment.",
-        "language": "Python",
-        "stars": 198,
-        "forks": 26,
-        "updated_at": "2025-08-04",
-        "topics": ["ai", "security", "soc", "llm", "mitre"],
-        "html_url": "https://github.com/example/threat-copilot",
-    },
-    {
-        "name": "iac-drift-sentinel",
-        "description": "Detects Terraform drift across large multi-account AWS footprints and files reconciliation PRs.",
-        "language": "Go",
-        "stars": 156,
-        "forks": 18,
-        "updated_at": "2025-07-19",
-        "topics": ["terraform", "drift", "aws", "automation"],
-        "html_url": "https://github.com/example/iac-drift-sentinel",
-    },
-    {
-        "name": "owasp-lab-platform",
-        "description": "Self-service OWASP Top 10 lab platform running on ephemeral Kubernetes namespaces.",
-        "language": "TypeScript",
-        "stars": 134,
-        "forks": 21,
-        "updated_at": "2025-06-02",
-        "topics": ["owasp", "ctf", "training", "kubernetes"],
-        "html_url": "https://github.com/example/owasp-lab-platform",
-    },
-]
+# ============ Live GitHub repos with cache + fallback ============
+_repo_cache = {"ts": 0.0, "data": None}
+_CACHE_TTL_SECONDS = 600  # 10 minutes
+
+
+def _fallback_repos() -> List[dict]:
+    """Static fallback used only if the GitHub API is unreachable."""
+    return [
+        {
+            "name": "netflix-devsecops",
+            "description": "End-to-end DevSecOps pipeline for a Netflix-clone app.",
+            "language": "Groovy",
+            "stars": 0,
+            "forks": 0,
+            "updated_at": "2025-11-01",
+            "topics": ["devsecops", "jenkins", "kubernetes", "argo-cd", "sonarqube", "trivy"],
+            "html_url": GITHUB_PROFILE,
+        },
+        {
+            "name": "gps-intelligence-dashboard",
+            "description": "Geospatial dashboard with AI-driven movement predictions.",
+            "language": "TypeScript",
+            "stars": 0,
+            "forks": 0,
+            "updated_at": "2025-09-15",
+            "topics": ["nextjs", "python", "ai", "geospatial"],
+            "html_url": GITHUB_PROFILE,
+        },
+        {
+            "name": "security-utilities",
+            "description": "Server scanner, log analyser, WASM password tool and more.",
+            "language": "Python",
+            "stars": 0,
+            "forks": 0,
+            "updated_at": "2025-08-02",
+            "topics": ["cybersecurity", "wasm", "cli", "utilities"],
+            "html_url": GITHUB_PROFILE,
+        },
+    ]
+
+
+async def _fetch_live_repos(username: str) -> List[dict]:
+    url = f"https://api.github.com/users/{username}/repos"
+    params = {"per_page": 30, "sort": "updated", "type": "owner"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "portfolio-app"}
+    token = os.environ.get("GITHUB_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    async with httpx.AsyncClient(timeout=8.0) as http:
+        r = await http.get(url, params=params, headers=headers)
+        r.raise_for_status()
+        rows = r.json()
+
+    def _clean(repo: dict) -> dict:
+        return {
+            "name": repo.get("name") or "",
+            "description": (repo.get("description") or "").strip() or "No description provided.",
+            "language": repo.get("language") or "Other",
+            "stars": int(repo.get("stargazers_count", 0)),
+            "forks": int(repo.get("forks_count", 0)),
+            "updated_at": (repo.get("updated_at") or "")[:10],
+            "topics": repo.get("topics") or [],
+            "html_url": repo.get("html_url") or f"https://github.com/{username}",
+        }
+
+    cleaned = [_clean(r) for r in rows if not r.get("fork") and not r.get("archived")]
+    # Rank: stars desc, then most recently updated
+    cleaned.sort(key=lambda r: (-r["stars"], r["updated_at"]), reverse=False)
+    cleaned.sort(key=lambda r: (r["stars"], r["updated_at"]), reverse=True)
+    return cleaned[:8]
 
 
 # ============ Routes ============
@@ -441,17 +399,36 @@ async def get_project(slug: str):
 
 @api_router.get("/github/repos", response_model=List[Repo])
 async def list_repos():
-    return REPOS
+    now = time.time()
+    if _repo_cache["data"] is not None and (now - _repo_cache["ts"]) < _CACHE_TTL_SECONDS:
+        return _repo_cache["data"]
+    try:
+        data = await _fetch_live_repos(GITHUB_USERNAME)
+        if not data:
+            data = _fallback_repos()
+    except Exception as exc:
+        logger.warning("GitHub live fetch failed: %s — using fallback.", exc)
+        data = _fallback_repos()
+    _repo_cache["data"] = data
+    _repo_cache["ts"] = now
+    return data
 
 
 @api_router.get("/stats")
 async def portfolio_stats():
+    try:
+        repos = await list_repos()
+        stars = sum(r["stars"] for r in repos)
+    except Exception:
+        stars = 0
     return {
-        "projects_shipped": 40,
-        "years_experience": 6,
-        "certifications": 7,
-        "open_source_stars": sum(r["stars"] for r in REPOS),
+        "projects_shipped": len(PROJECTS),
+        "years_experience": 2,
+        "certifications": 8,
+        "open_source_stars": stars,
         "clouds": 3,
+        "tryhackme_rank_percentile": 1,
+        "tryhackme_labs_completed": 263,
     }
 
 

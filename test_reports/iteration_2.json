@@ -1,0 +1,40 @@
+{
+  "summary": "Iteration 2 regression for Nithin Karipalli portfolio (real content + live GitHub + resume.pdf). 15/15 backend pytest cases pass including live GitHub fetch, cache re-serve, resume.pdf static asset, and updated project slugs/counts. All 14 frontend behavioural checks pass end-to-end against the public preview URL. No blocking issues found.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "Optional: Certifications cards don't expose data-testid (e.g. cert-card-<id>). Non-blocking today (all 8 render and text is queryable), but adding testids improves test stability."
+  ],
+  "critical_code_review_comments": [
+    "server.py: /api/github/repos live path uses in-memory dict cache with TTL — fine for single-worker uvicorn, but with multiple workers each has its own cache (acceptable for MVP).",
+    "server.py: _fetch_live_repos sorts twice back-to-back (line 353-354) — the first sort is immediately overridden by the second. Cosmetic dead code; safe to remove line 353.",
+    "server.py: still uses deprecated FastAPI on_event('shutdown') — migrate to lifespan handler (carried over from iter 1, not a functional issue).",
+    "Hero.jsx: availability badge shows lowercase text 'Available for internships & full-time roles' in JS state but the CSS class 'uppercase' visually renders 'AVAILABLE FOR INTERNSHIPS & FULL-TIME ROLES' — matches spec but note that automated text matches must query the DOM value, not the rendered visual.",
+    "Certifications.jsx: cards lack data-testid attributes (all other sections have them) — inconsistent with the rest of the codebase.",
+    "server.py: /api/stats no longer exposes some fields listed in old response (still returns years_experience/open_source_stars/clouds); harmless but keep front-end consumers aware."
+  ],
+  "updated_files": [
+    "/app/backend/tests/backend_test.py (rewritten for new slugs, counts, live github, stats values, resume.pdf)"
+  ],
+  "success_rate": {
+    "backend": "100% (15/15)",
+    "frontend": "100% (14/14)"
+  },
+  "test_credentials": "N/A - no auth",
+  "seed_data_creation": "One contact record inserted with TEST_ prefix (name='TEST_Nithin Contact', email='test-contact@example.com'). Safe to leave or purge from db.contact_messages.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend suite at /app/backend/tests/backend_test.py hits public REACT_APP_BACKEND_URL. Covers: health; /api/projects (list=5 with the 5 new slugs, featured filter, tag filter DevSecOps, no-match tag, netflix-devsecops-pipeline full case study, 404); /api/github/repos live shape (all html_url start with https://github.com/Ni7H1N, subset of expected repo names {nginx-log-analyser, server-scanner, LCS-Scanner, password-strength-wasm, DevSecOps-Project} verified — this test uses pytest.skip if the fallback is served instead), cache fast-second-call under 5s; /api/stats projects_shipped=5, certifications=8, tryhackme_rank_percentile=1, tryhackme_labs_completed=263; /api/contact happy path 200 + email/missing validation 422; /resume.pdf 200 application/pdf non-empty (1869 bytes). Frontend Playwright verified: hero name Nithin Karipalli + location Hyderabad, Telangana · India inside /var/log/current card, availability badge text (uppercase-transformed), Top 1% THM / 263+ labs / 23 badges stats; 3 hero CTAs (primary #work, resume /resume.pdf, secondary #terminal); navbar Resume + Get in touch; 5 project cards; navigate to /projects/netflix-devsecops-pipeline shows Problem/Architecture/DevSecOps pipeline blocks; GitHub Pinned repositories renders 8 cards including real repos (nginx-log-analyser, server-scanner, LCS-Scanner); Highlights & education heading with THM/CTF/Vignan's cards; 8 certification cards including all listed names; terminal 'projects' prints 5 slugs, 'certifications' prints 8 entries.",
+  "rca of the issue": "No bugs found in this iteration."
+}

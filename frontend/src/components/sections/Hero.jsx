@@ -85,6 +85,16 @@ export default function Hero() {
               <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
             <a
+              href={PROFILE.links.resume}
+              target="_blank"
+              rel="noreferrer"
+              data-testid="hero-resume-download"
+              className="group inline-flex items-center gap-2 px-5 py-3 border border-white/15 hover:border-cyan-400/60 hover:bg-white/[0.04] font-mono text-xs uppercase tracking-widest text-white transition-colors duration-200"
+            >
+              Download resume
+              <span className="text-cyan-400">↓</span>
+            </a>
+            <a
               href="#terminal"
               data-testid={IDS.heroSecondaryCta}
               className="group inline-flex items-center gap-2 px-5 py-3 border border-white/15 hover:border-cyan-400/60 hover:bg-white/[0.04] font-mono text-xs uppercase tracking-widest text-white transition-colors duration-200"
@@ -117,13 +127,13 @@ export default function Hero() {
               <p className="text-white">{PROFILE.location}</p>
               <p><span className="text-white/40">$</span> now</p>
               <p className="text-white">
-                Reducing MTTR · shipping SLSA-3 pipelines · training an ATT&amp;CK copilot.
+                Shipping DevSecOps pipelines · running CTFs · Top 1% on TryHackMe.
               </p>
               <p className="text-emerald-400/90">$ ready<span className="cursor-blink">_</span></p>
             </div>
           </div>
           <div className="mt-4 grid grid-cols-3 gap-2">
-            {["6+ yrs", "40+ ships", "3 clouds"].map((s) => (
+            {["Top 1% THM", "263+ labs", "23 badges"].map((s) => (
               <div key={s} className="p-3 border border-white/8 text-center">
                 <p className="text-white font-cabinet text-xl">{s.split(" ")[0]}</p>
                 <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mt-1">{s.split(" ").slice(1).join(" ")}</p>
