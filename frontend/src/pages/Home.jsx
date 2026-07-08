@@ -4,6 +4,7 @@ import Hero from "@/components/sections/Hero";
 import DevSecOps from "@/components/sections/DevSecOps";
 import Projects from "@/components/sections/Projects";
 import Cybersecurity from "@/components/sections/Cybersecurity";
+import Achievements from "@/components/sections/Achievements";
 import GlobalNetwork from "@/components/sections/GlobalNetwork";
 import TerminalSection from "@/components/sections/TerminalSection";
 import GitHubSection from "@/components/sections/GitHubSection";
@@ -20,6 +21,7 @@ export default function Home() {
         <DevSecOps />
         <Projects />
         <Cybersecurity />
+        <Achievements />
         <TerminalSection />
         <GlobalNetwork />
         <GitHubSection />

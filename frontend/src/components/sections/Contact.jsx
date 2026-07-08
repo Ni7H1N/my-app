@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { Send, Mail, MapPin, Github, Linkedin, Shield } from "lucide-react";
+import { Send, Mail, MapPin, Github, Linkedin, Shield, Copy } from "lucide-react";
 import { submitContact } from "@/lib/api";
 import { PROFILE } from "@/lib/data";
 import { IDS } from "@/constants/testIds";
@@ -57,6 +57,21 @@ export default function Contact() {
               <div className="flex items-center gap-3">
                 <Mail className="h-4 w-4 text-cyan-400" />
                 <a href={`mailto:${PROFILE.links.email}`} className="hover:text-cyan-400">{PROFILE.links.email}</a>
+                <button
+                  data-testid="contact-copy-email"
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(PROFILE.links.email);
+                      toast.success("Email copied to clipboard");
+                    } catch {
+                      toast.error("Couldn't copy — select the email manually.");
+                    }
+                  }}
+                  aria-label="Copy email"
+                  className="ml-1 p-1.5 border border-white/10 hover:border-cyan-400/50 hover:bg-white/[0.04] transition-colors duration-200"
+                >
+                  <Copy className="h-3 w-3 text-white/70" />
+                </button>
               </div>
               <div className="flex items-center gap-3">
                 <MapPin className="h-4 w-4 text-cyan-400" />

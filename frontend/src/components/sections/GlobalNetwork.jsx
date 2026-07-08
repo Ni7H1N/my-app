@@ -9,8 +9,29 @@ export default function GlobalNetwork() {
   const containerRef = useRef(null);
   const globeRef = useRef(null);
   const [size, setSize] = useState({ w: 800, h: 520 });
-  const [mounted, setMounted] = useState(false);
+  const [inView, setInView] = useState(false);
 
+  // Observe intersection so we only pay the WebGL cost when the user reaches it
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setInView(true);
+            io.disconnect();
+            break;
+          }
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  // Size observer
   useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
@@ -19,22 +40,32 @@ export default function GlobalNetwork() {
     });
     ro.observe(el);
     setSize({ w: el.clientWidth, h: el.clientHeight });
-    setMounted(true);
     return () => ro.disconnect();
   }, []);
 
+  // Enable slow auto-rotate once the globe mounts
   useEffect(() => {
+    if (!inView) return;
     const t = setTimeout(() => {
       if (!globeRef.current) return;
       const controls = globeRef.current.controls?.();
       if (controls) {
         controls.autoRotate = true;
-        controls.autoRotateSpeed = 0.4;
+        controls.autoRotateSpeed = 0.42;
         controls.enableZoom = false;
       }
-    }, 400);
+      // Clamp devicePixelRatio to save GPU on retina
+      try {
+        const renderer = globeRef.current.renderer?.();
+        if (renderer && renderer.setPixelRatio) {
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+        }
+      } catch (_) {
+        /* renderer not exposed */
+      }
+    }, 300);
     return () => clearTimeout(t);
-  }, [mounted]);
+  }, [inView]);
 
   return (
     <section id="network" className="relative py-24 sm:py-32 border-t border-white/5 overflow-hidden">
@@ -60,7 +91,6 @@ export default function GlobalNetwork() {
           className="relative h-[440px] md:h-[560px] surface-glass overflow-hidden"
         >
           <div className="absolute inset-0 pointer-events-none z-10 grain" />
-          {/* corner labels */}
           <div className="absolute top-4 left-4 font-mono text-[10px] uppercase tracking-widest text-white/40 z-10">
             NET.STATUS <span className="text-emerald-400">OK</span>
           </div>
@@ -71,12 +101,12 @@ export default function GlobalNetwork() {
             drag to rotate · auto-orbit engaged
           </div>
 
-          <Suspense fallback={<div className="h-full w-full grid place-items-center text-white/40 font-mono text-xs">loading globe…</div>}>
-            {mounted && (
+          {inView ? (
+            <Suspense fallback={<div className="h-full w-full grid place-items-center text-white/40 font-mono text-xs">rendering globe…</div>}>
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ duration: 1.2 }}
+                transition={{ duration: 1.0 }}
                 className="absolute inset-0 grid place-items-center"
               >
                 <Globe
@@ -88,7 +118,8 @@ export default function GlobalNetwork() {
                   atmosphereAltitude={0.22}
                   showGlobe
                   showAtmosphere
-                  globeMaterial={undefined}
+                  animateIn={false}
+                  rendererConfig={{ antialias: false, powerPreference: "low-power" }}
                   globeImageUrl="https://unpkg.com/three-globe/example/img/earth-night.jpg"
                   bumpImageUrl={null}
                   arcsData={GLOBE_ARCS}
@@ -98,7 +129,7 @@ export default function GlobalNetwork() {
                   arcDashLength={0.5}
                   arcDashGap={1.5}
                   arcDashInitialGap={() => Math.random() * 3}
-                  arcDashAnimateTime={3200}
+                  arcDashAnimateTime={2600}
                   pointsData={GLOBE_POINTS}
                   pointColor={() => "#00E5FF"}
                   pointAltitude={0.02}
@@ -106,8 +137,21 @@ export default function GlobalNetwork() {
                   pointLabel={(d) => `<div style='font-family:JetBrains Mono;font-size:11px;color:#00E5FF;background:#0a0a0c;border:1px solid #333;padding:4px 8px;text-transform:uppercase;letter-spacing:.14em'>${d.label}</div>`}
                 />
               </motion.div>
-            )}
-          </Suspense>
+            </Suspense>
+          ) : (
+            <div className="h-full w-full grid place-items-center">
+              <div className="text-center">
+                <div className="relative h-24 w-24 mx-auto">
+                  <div className="absolute inset-0 rounded-full border border-cyan-400/30" />
+                  <div className="absolute inset-2 rounded-full border border-cyan-400/20" />
+                  <div className="absolute inset-4 rounded-full border border-cyan-400/10" />
+                </div>
+                <p className="mt-6 font-mono text-[10px] uppercase tracking-widest text-white/30">
+                  scroll to load globe
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

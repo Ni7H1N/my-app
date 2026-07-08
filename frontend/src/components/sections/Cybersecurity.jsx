@@ -12,7 +12,7 @@ const DOMAINS = [
 
 export default function Cybersecurity() {
   return (
-    <section className="relative py-24 sm:py-32 border-t border-white/5">
+    <section id="cybersec" className="relative py-24 sm:py-32 border-t border-white/5">
       <div className="mx-auto max-w-7xl px-6 md:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
           <div>

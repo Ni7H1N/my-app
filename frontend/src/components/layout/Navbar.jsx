@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Terminal } from "lucide-react";
+import { Menu, X, Terminal, Command as CommandIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { IDS } from "@/constants/testIds";
+import LiveTime from "@/components/effects/LiveTime";
 
 const LINKS = [
   { key: "work", label: "Work", href: "#work" },
   { key: "stack", label: "Stack", href: "#stack" },
+  { key: "achievements", label: "Signals", href: "#achievements" },
   { key: "network", label: "Network", href: "#network" },
   { key: "terminal", label: "Terminal", href: "#terminal" },
   { key: "experience", label: "Experience", href: "#experience" },
@@ -46,7 +48,7 @@ export default function Navbar() {
           </span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-6 lg:gap-8">
           {LINKS.map((l) => (
             <a
               key={l.key}
@@ -60,6 +62,16 @@ export default function Navbar() {
         </nav>
 
         <div className="hidden md:flex items-center gap-3">
+          <LiveTime tz="Asia/Kolkata" label="HYD" />
+          <button
+            onClick={() => window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", metaKey: true }))}
+            data-testid="nav-command-palette-open"
+            aria-label="Open command palette"
+            className="hidden lg:inline-flex items-center gap-1.5 px-2.5 py-1.5 border border-white/10 hover:border-cyan-400/50 hover:bg-white/[0.04] text-[11px] font-mono text-white/50 hover:text-white transition-colors duration-200"
+          >
+            <CommandIcon className="h-3 w-3" />
+            <span>K</span>
+          </button>
           <a
             href="/resume.pdf"
             target="_blank"
