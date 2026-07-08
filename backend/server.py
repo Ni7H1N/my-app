@@ -350,7 +350,6 @@ async def _fetch_live_repos(username: str) -> List[dict]:
 
     cleaned = [_clean(r) for r in rows if not r.get("fork") and not r.get("archived")]
     # Rank: stars desc, then most recently updated
-    cleaned.sort(key=lambda r: (-r["stars"], r["updated_at"]), reverse=False)
     cleaned.sort(key=lambda r: (r["stars"], r["updated_at"]), reverse=True)
     return cleaned[:8]
 

@@ -29,6 +29,7 @@ export default function Certifications() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: (i % 3) * 0.05 }}
+              data-testid={`cert-card-${c.id}`}
               className="surface-glass p-5 hover:border-cyan-400/25 transition-colors duration-300"
             >
               <div className="flex items-start justify-between gap-3">

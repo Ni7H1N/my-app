@@ -57,3 +57,17 @@ Build a premium, enterprise-grade portfolio for a DevSecOps / Cloud Engineering 
 - Testing agent verification of API + UI
 - User replaces PROFILE (name, links, email) in `src/lib/data.js`
 EOF
+
+## Update — real content + live GitHub + resume (2025-12)
+- Replaced placeholder `PROFILE`, `EXPERIENCE` (repurposed as achievements), `EDUCATION`, `CERTIFICATIONS` in `/app/frontend/src/lib/data.js` with **Nithin Karipalli**'s real details.
+- Replaced `PROJECTS` in `/app/backend/server.py` with 5 real projects (Netflix DevSecOps Pipeline, GPS Intelligence Dashboard, Security Utilities Suite, AI Fish Catch Prediction, MedBot).
+- Wired `/api/github/repos` to fetch **live** from `https://api.github.com/users/Ni7H1N/repos` with 10-minute in-memory cache and static fallback on error. Env vars: `GITHUB_USERNAME` (default `Ni7H1N`), optional `GITHUB_TOKEN` for higher rate limits.
+- Added placeholder `/app/frontend/public/resume.pdf` (1.8 KB reportlab-generated PDF) — user can drop their real PDF over it.
+- Navbar now has separate **Resume** (→ `/resume.pdf`) and **Get in touch** buttons; Hero now has three CTAs (View case studies · Download resume · Open terminal).
+- Terminal `projects` output reflects new slugs; brand text → `ni7h1n/sec`; terminal header → `nithin@portfolio`.
+- Iteration 2 testing: 15/15 backend, 14/14 frontend — passed.
+
+## Next tasks
+- User to drop real one-page PDF at `/app/frontend/public/resume.pdf`
+- Optional: set `GITHUB_TOKEN` in `/app/backend/.env` to avoid GitHub 60-req/hr anon rate limit
+- Optional: connect real GitHub star counts to the hero stats
