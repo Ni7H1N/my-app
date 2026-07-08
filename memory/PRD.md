@@ -71,3 +71,16 @@ EOF
 - User to drop real one-page PDF at `/app/frontend/public/resume.pdf`
 - Optional: set `GITHUB_TOKEN` in `/app/backend/.env` to avoid GitHub 60-req/hr anon rate limit
 - Optional: connect real GitHub star counts to the hero stats
+
+## Update — perf + top-notch features (iter 3)
+- Rotated `GITHUB_TOKEN` to the new PAT in `/app/backend/.env`.
+- **Command Palette (⌘K / Ctrl+K)** — shadcn Command dialog with Navigate / Actions / Projects / Elsewhere groups. Copy email, download resume, jump to any section or open any project. Component: `/app/frontend/src/components/effects/CommandPalette.jsx`.
+- **Live Time pill** in navbar showing current time in Asia/Kolkata (`HYD HH:MM`) with a green pulse. Component: `/app/frontend/src/components/effects/LiveTime.jsx`.
+- **Achievements section** ("// signals · Proof of practice.") with 4 cards: Top 1% TryHackMe / Top 100 Great AppSec / 3rd Place Overnight CTF / 263 labs. Sits between Cybersecurity and Terminal.
+- **Copy-email button** next to email in Contact section (sonner toast on success/failure).
+- **Perf: lazy-mount globe** — `IntersectionObserver` gate before mounting `react-globe.gl` (three.js). Shows an animated concentric-circle placeholder until the user reaches the section. Also clamps devicePixelRatio to 1.5 and uses `low-power` GPU preference. Big paint-and-boot win.
+- **Perf: Lenis re-tuned** — switched from duration-based smoothing to `lerp: 0.09` with `syncTouch: true` for a snappier, more "native" feel.
+- **Perf: font preconnect** — added preconnects for Fontshare and dns-prefetch for unpkg / api.github.com in `/app/frontend/public/index.html`.
+- **SEO fix** — replaced default title/description with real Nithin content.
+- **Accessibility** — added visually-hidden DialogTitle to command palette to satisfy Radix a11y contract.
+- **Iter 3 testing**: 15/15 backend, 18/18 frontend features — passed. FCP ~840ms, DCL ~920ms.

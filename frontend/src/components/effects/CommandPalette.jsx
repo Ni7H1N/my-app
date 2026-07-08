@@ -12,6 +12,8 @@ import {
   CommandSeparator,
   CommandShortcut,
 } from "@/components/ui/command";
+import { DialogTitle } from "@/components/ui/dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import {
   Github, Linkedin, Shield, Mail, FileDown, Terminal, Cloud, ShieldCheck, Boxes, Globe as GlobeIcon, MessageSquare, User, Copy, ArrowUpRight, Award, Sparkles,
 } from "lucide-react";
@@ -71,6 +73,9 @@ export default function CommandPalette({ open, onOpenChange }) {
       onOpenChange={onOpenChange}
       data-testid="command-palette"
     >
+      <VisuallyHidden.Root>
+        <DialogTitle>Command palette</DialogTitle>
+      </VisuallyHidden.Root>
       <div className="bg-[#0a0a0c] text-white border border-white/10">
         <Command
           className="bg-transparent [&_[cmdk-group-heading]]:text-[10px] [&_[cmdk-group-heading]]:font-mono [&_[cmdk-group-heading]]:uppercase [&_[cmdk-group-heading]]:tracking-widest [&_[cmdk-group-heading]]:text-white/40 [&_[cmdk-group-heading]]:px-3 [&_[cmdk-group-heading]]:pt-3"
