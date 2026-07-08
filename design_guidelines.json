@@ -1,0 +1,186 @@
+{
+  "theme": "dark_primary_with_light_option",
+  "design_philosophy": "Enterprise-grade, premium product inspired by Vercel, Linear, and OpenAI. Technical precision meets minimalist luxury. Avoid generic AI slop gradients. Utilize tight typography, massive negative space, and micro-interactions.",
+  "typography": {
+    "headings": {
+      "family": "Cabinet Grotesk, sans-serif",
+      "description": "Used for all H1-H4. Delivers a sharp, geometric, and highly technical look.",
+      "css_import": "@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,500,700,400,900&display=swap');",
+      "classes": "font-cabinet tracking-tight"
+    },
+    "body": {
+      "family": "Satoshi, sans-serif",
+      "description": "Replaces Inter/Roboto. Highly legible, modern grotesque for clean reading.",
+      "css_import": "@import url('https://api.fontshare.com/v2/css?f[]=satoshi@900,700,500,300,400&display=swap');",
+      "classes": "font-satoshi leading-relaxed"
+    },
+    "monospace": {
+      "family": "'JetBrains Mono', monospace",
+      "description": "Essential for the DevSecOps/Cybersecurity vibe. Used for terminal, code blocks, labels, and stats.",
+      "css_import": "@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap');",
+      "classes": "font-mono tracking-tight"
+    }
+  },
+  "colors": {
+    "dark_mode": {
+      "background": "#050505",
+      "surface_base": "#09090B",
+      "surface_glass": "rgba(255, 255, 255, 0.03)",
+      "text_primary": "#FFFFFF",
+      "text_secondary": "#A1A1AA",
+      "text_tertiary": "#52525B",
+      "border_subtle": "rgba(255, 255, 255, 0.08)",
+      "border_glow": "rgba(255, 255, 255, 0.15)",
+      "accent_primary": "#00E5FF",
+      "accent_secondary": "#CCFF00",
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444"
+    },
+    "light_mode": {
+      "background": "#FAFAFA",
+      "surface_base": "#FFFFFF",
+      "surface_glass": "rgba(0, 0, 0, 0.03)",
+      "text_primary": "#09090B",
+      "text_secondary": "#52525B",
+      "text_tertiary": "#A1A1AA",
+      "border_subtle": "rgba(0, 0, 0, 0.08)",
+      "border_glow": "rgba(0, 0, 0, 0.15)",
+      "accent_primary": "#0066FF",
+      "accent_secondary": "#00A63E",
+      "success": "#10B981",
+      "warning": "#F59E0B",
+      "error": "#EF4444"
+    },
+    "gradients": {
+      "aurora_dark": "radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.15), transparent 60%)",
+      "spotlight": "radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(255,255,255,0.06), transparent 40%)",
+      "text_metallic": "linear-gradient(to right, #FFFFFF, #A1A1AA)"
+    }
+  },
+  "visual_enhancers": {
+    "noise_texture": "Apply a 2-4% opacity SVG noise overlay across the background to remove digital flatness.",
+    "borders": "1px solid border_subtle. Avoid heavy shadows; rely on border contrast.",
+    "shadows": {
+      "glow_sm": "0 0 15px rgba(0, 229, 255, 0.1)",
+      "glow_md": "0 0 30px rgba(0, 229, 255, 0.15)"
+    },
+    "blur": "backdrop-blur-xl (16px to 24px) for sticky navs and modal overlays."
+  },
+  "component_styles": {
+    "buttons": {
+      "primary": "Sharp edges (rounded-none or max rounded-sm), border 1px solid white/20, hover bg-white/10, text-white. Magnetic hover effect.",
+      "secondary": "Ghost style, text-secondary hover:text-white transition-colors duration-300."
+    },
+    "cards": {
+      "base": "Glassmorphism, bg-white/[0.02], border border-white/5, backdrop-blur-md, internal padding p-6 or p-8.",
+      "hover": "Tilt effect (Framer Motion), subtle border illumination matching mouse position (mouse spotlight)."
+    },
+    "badges": {
+      "base": "Pill-shaped (rounded-full), bg-white/5, border border-white/10, font-mono text-xs uppercase tracking-widest px-3 py-1."
+    },
+    "terminal": {
+      "container": "bg-[#0A0A0A], border border-[#333], rounded-lg shadow-2xl overflow-hidden",
+      "header": "h-10 bg-[#1A1A1A] border-b border-[#333] flex items-center px-4 space-x-2 (mac-like traffic lights in grays)",
+      "body": "p-6 font-mono text-sm text-[#A1A1AA] space-y-2",
+      "prompt": "text-[#00E5FF] mr-2"
+    }
+  },
+  "grids_layouts": {
+    "spacing_system": "Use generous spacing. Tailwind p-8 to p-24 for section margins. Elements must breathe.",
+    "bento_grid": "For Cyber/DevSecOps skills. grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4 or gap-6. Mix tall (row-span-2) and wide (col-span-2) cards."
+  },
+  "motion_timing_tokens": {
+    "fast": "150ms ease-out (micro-interactions, hovers)",
+    "medium": "300ms ease-out (modal reveals, color transitions)",
+    "slow": "700ms cubic-bezier(0.16, 1, 0.3, 1) (section blur reveals, staggering)",
+    "parallax": "Tied to scroll progress via Framer Motion useScroll()"
+  },
+  "sections_blueprints": {
+    "hero": {
+      "layout": "Min-h-screen, center aligned structurally but asymmetrical in element placement.",
+      "elements": "Dynamic role rotation (typing or flip), metallic gradient text for name, availability badge (pulsing green dot), primary CTA, aurora background glow.",
+      "tech_ticker": "react-fast-marquee at bottom of hero. Monospace, uppercase, text-white/30, paused on hover."
+    },
+    "projects": {
+      "layout": "Grid of premium cards. 1 or 2 columns max for high detail.",
+      "elements": "Project Cards feature subtle tech image abstract, tags (React, AWS, etc.), and 'View Case Study' button. On click -> detailed page with Architecture, Implementation, and DevSecOps Pipeline visualization."
+    },
+    "global_network": {
+      "layout": "Full width, h-[60vh] to h-[80vh], deep black background.",
+      "elements": "Three.js Globe (react-globe.gl) with point clouds, glowing cyan routes. Draggable. Represents global deployments/edge networks."
+    },
+    "terminal_section": {
+      "layout": "Centered massive terminal window.",
+      "elements": "Interactive. Types 'help' automatically, user can type 'whoami', 'skills', 'clear'. Blinking cursor."
+    },
+    "devsecops_pipeline": {
+      "layout": "Horizontal scrolling or staggered vertical nodes.",
+      "elements": "Animated nodes (Code -> Build -> Test -> Sec Scan -> Deploy) with active states moving through the pipeline."
+    }
+  },
+  "accessibility": {
+    "focus": "All interactive elements must have focus-visible:ring-2 focus-visible:ring-accent_primary outline-none.",
+    "aria": "Use aria-hidden on decorative animations. Provide aria-labels for terminal inputs and 3D canvas.",
+    "motion": "Respect prefers-reduced-motion CSS media query by disabling parallax and fast tilts."
+  },
+  "3d_libraries": {
+    "recommended": [
+      {
+        "name": "react-globe.gl",
+        "purpose": "Interactive 3D network globe for the Global Network section.",
+        "install": "yarn add react-globe.gl"
+      },
+      {
+        "name": "framer-motion",
+        "purpose": "Core animation engine for tilt cards, scroll reveals, and staggering.",
+        "install": "yarn add framer-motion"
+      },
+      {
+        "name": "@studio-freight/react-lenis",
+        "purpose": "Momentum smooth scrolling for premium feel.",
+        "install": "yarn add @studio-freight/react-lenis"
+      }
+    ]
+  },
+  "image_urls": [
+    {
+      "category": "Cloud Infrastructure / Projects",
+      "url": "https://images.pexels.com/photos/37994983/pexels-photo-37994983.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+      "description": "Dark, moody telecom/cloud tower. Good for abstract infrastructure representation."
+    },
+    {
+      "category": "Cybersecurity / Code",
+      "url": "https://images.pexels.com/photos/2653362/pexels-photo-2653362.jpeg",
+      "description": "Detailed view of dark-themed code, excellent for DevSecOps/AppSec project thumbnails."
+    },
+    {
+      "category": "Server Rack / Hardware",
+      "url": "https://images.unsplash.com/photo-1762163516269-3c143e04175c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NDQ2Mzl8MHwxfHNlYXJjaHwxfHxzZXJ2ZXIlMjByYWNrJTIwZGFya3xlbnwwfHx8fDE3ODM1MzYyNTR8MA&ixlib=rb-4.1.0&q=85",
+      "description": "Dark server rack with blinking green lights. Great for DevOps/Infrastructure backgrounds."
+    }
+  ],
+  "instructions_to_main_agent": [
+    "You are building a premium product, not a template. Do not center everything. Use structural asymmetry.",
+    "Add 'data-testid' to all interactive elements for testing.",
+    "Implement the Lenis smooth scroll wrapping the entire app layout.",
+    "Ensure the terminal component handles input state correctly and provides mock outputs for commands.",
+    "Do not use generic Shadcn cards without modifying them to fit the glass/minimalist border requirements.",
+    "Use lucide-react for UI icons, or optionally Phosphor icons for a technical feel.",
+    "Ensure 'react-globe.gl' runs inside a wrapper that prevents hydration errors (e.g., dynamically load if Next.js, or standard useEffect mounting for plain React).",
+    "Install 'react-fast-marquee' for the tech ticker.",
+    "Do NOT use pure transparent backgrounds for sticky headers; use backdrop-blur with a semi-transparent base."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Avoid generic, 'on distribution' AI outputs. Craft distinct frontends.",
+    "Dark colors must not be used as generic gradients. Use solid dark colors with noise or hyper-specific radial glows (spotlights).",
+    "Create depth via z-index hierarchy and layered backdrops (blur).",
+    "Never use transition: all. Target specific properties (opacity, transform, background-color).",
+    "Never center-align the main App container in CSS (.App { text-align: center; } is strictly forbidden).",
+    "Do not use emojis (🤖🧠) for icons. Use SVG icon libraries.",
+    "Apply 2-3x more spacing than typical templates (p-8, p-12, p-24).",
+    "All toasts must use the 'sonner' library.",
+    "Component Reuse: Prioritize existing components in src/components/ui.",
+    "Test Attributes: All interactive elements MUST include data-testid attribute in kebab-case format based on role (e.g., 'terminal-input', 'submit-contact-button')."
+  ]
+}
